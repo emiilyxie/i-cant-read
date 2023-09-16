@@ -19,10 +19,13 @@ openai.api_key = "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"
 def hello():
     return "Hello world"
 
+@app.route('/api/generate-content')
+def generate_content():
+    return "Hello world"
+
 @app.route('/api/process-text', methods=['POST'])
 def process_text():
-    print("hi")
-    return "hihi"
+    return "process text not yet implemented"
     # Get the text from the request body
     text = request.json['text']
 
@@ -53,6 +56,7 @@ def process_text():
 
 @app.route('/api/generate-quiz', methods=['POST'])
 def generate_quiz():
+    return "generate quiz not yet implemented"
     # Get the text from the request body
     text = request.json['text']
 
