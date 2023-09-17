@@ -71,8 +71,9 @@ def get_image():
     image = client.sd_generate(
         prompt=processed_text,
         negative_prompt="badly drawn, blurry, low quality",
-        model=SdModel.TOONYOU_6)
-        
+        model=SdModel.ANYTHING_V5,
+        upscale=True,
+        aspect_ratio="landscape")
     url=image.url
 
     response = requests.get(url)
@@ -91,7 +92,7 @@ def summarize():
 
     data = {
         "model": "gpt-3.5-turbo",
-        "messages": [{"role": "user", "content": text+"using the text above to generate 15-25 words a very accurate and precise summary"}],
+        "messages": [{"role": "user", "content": text + " using the text above to generate 15-25 words a very accurate and precise summary"}],
         "temperature": 0.7
     }
 
@@ -119,7 +120,7 @@ def get_img_prompt(text):
 
     data = {
         "model": "gpt-4",
-        "messages": [{"role": "user", "content": text+"using the text above to generate a very accurate and precise 10-15 words prompt for AI generate art to generate something"}],
+        "messages": [{"role": "user", "content": text+"using the text above to generate a very accurate and precise 15-20 words prompt for AI generate art to generate art that contains educational and informative content,make sure the important thing are at the front in the prompt and be very precise about the image"}],
         "temperature": 1.2
     }
 
