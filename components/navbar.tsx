@@ -21,6 +21,11 @@ const Navbar = () => {
           </Link>
         </li>
       </ul>
+      <ul className={styles.colorModes}>
+        <button className={`${styles.dot} ${styles.whiteMode}`}></button>
+        <button className={`${styles.dot} ${styles.paperMode}`}></button>
+        <button className={`${styles.dot} ${styles.darkMode}`}></button>
+      </ul>
     </nav>
   );
 };

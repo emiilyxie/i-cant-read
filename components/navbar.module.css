@@ -11,3 +11,29 @@
     padding-right: 2em;
     text-decoration: none;
 }
+
+.colorModes {
+  float: right;
+}
+
+.dot {
+  height: 9px;
+  width: 9px;
+  border-radius: 50%;
+  border-color: rgb(var(--foreground-rgb));
+  border-width: 1px;
+  display: inline-block;
+  margin-left: 1.5em;
+}
+
+.whiteMode {
+  background-color: white;
+}
+
+.paperMode {
+  background-color: rgb(244,244,244);
+}
+
+.darkMode {
+  background-color: black;
+}
