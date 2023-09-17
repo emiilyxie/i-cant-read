@@ -7,13 +7,15 @@ from PIL import Image
 from base64 import b64decode
 from io import BytesIO
 from flask import send_file
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
-apiKey = "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"
+load_dotenv()
+api_key = os.getenv("api_key")
 MODEL_ENGINE = "gpt-4"
 url = "https://api.openai.com/v1/chat/completions"
-openai.api_key = apiKey
+openai.api_key = api_key
 TMP_FOLDER = "/tmp"
 
 @app.route('/api/')
@@ -90,7 +92,7 @@ def generate_quiz():
 def process_with_chat_gpt(text):
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {apiKey}"
+        "Authorization": f"Bearer {api_key}"
     }
 
     data = {
@@ -107,7 +109,7 @@ def process_with_chat_gpt(text):
 def generate_quiz_with_chatgpt(text):
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {apiKey}"
+        "Authorization": f"Bearer {api_key}"
     }
 
     data = {
