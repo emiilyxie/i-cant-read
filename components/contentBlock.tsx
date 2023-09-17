@@ -42,7 +42,7 @@ export default function ContentBlock(props : any) {
         {imgStatus == 200 && <div><img src={img}></img></div>}
         <RegenerateButton type="image" action={getImage} />
       </> : 
-      <LoadingSpinner description="Loading image..." />}</div>
+      <LoadingSpinner description="Loading image" />}</div>
     </div>
   )
 }

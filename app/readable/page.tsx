@@ -9,11 +9,13 @@ import LoadingSpinner from "@/components/loadingSpinner"
 
 export default function ReadableContent() {
 
+  const [title, setTitle] = useState("")
   const [text, setText] = useState("")
   const [content, setContent] = useState([])
   const [summary, setSummary] = useState([])
   const [quiz, setQuiz] = useState([])
 
+  const [loadingTitle, setLoadingTitle] = useState(true)
   const [loadingContent, setLoadingContent] = useState(true)
   const [loadingSummary, setLoadingSummary] = useState(true)
   const [quizStatus, setQuizStatus] = useState(0);
@@ -67,6 +69,23 @@ export default function ReadableContent() {
     }).catch(error => console.error(error));
   }
 
+  const fetchTitle = () => {
+    fetch('/api/generate-title', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          text: text
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        setTitle(data.data)
+        setLoadingTitle(false)
+    })
+  }
+
   const startTTS = () => {
     fetch('/api/tts', {
       method: 'POST',
@@ -99,18 +118,17 @@ export default function ReadableContent() {
     if (text != "") {
       fetchSummary()
       fetchQuiz()
+      fetchTitle()
     }
   }, [text])
-
-  let title = "Typescript is annoying"
 
   return (
     <div className={styles.content}>
       <div className={styles.title}>
-        {title}
+        {!loadingTitle ? title : <LoadingSpinner description="Loading title" />}
       </div>
       <div className={styles.summary}>
-        {!loadingSummary ? summary : <LoadingSpinner description="Loading summary..." />}
+        {!loadingSummary ? summary : <LoadingSpinner description="Loading summary" />}
       </div>
       <div className={styles.soundButtons}>
         <button onClick={startTTS}>Start TTS</button>
@@ -132,7 +150,7 @@ export default function ReadableContent() {
                />
           }) : (
           quizStatus == 0 ?
-          <LoadingSpinner description="Loading quiz..." /> : 
+          <LoadingSpinner description="Loading quiz" /> : 
           <RegenerateButton type="quiz" action={fetchQuiz} />)}
       </div>
       

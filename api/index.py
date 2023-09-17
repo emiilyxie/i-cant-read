@@ -106,7 +106,6 @@ def get_image():
 @app.route('/api/summarize', methods=['POST'])
 def summarize():
     text = request.json['text']
-    print(text)
 
     headers = {
         "Content-Type": "application/json",
@@ -134,6 +133,25 @@ def generate_quiz():
     parsed_quiz = parse_quiz(quiz, answers)
     return jsonify({"data": {"quiz": parsed_quiz, "answers": answers}})
 
+@app.route('/api/generate-title', methods=['POST'])
+def generate_title():
+    text = request.json['text']
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    data = {
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": text+"using the text above to generate a simple title to summarize the content of the article"}],
+        "temperature": 0.3
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+    completions = response.json()
+    message = completions["choices"][0]["message"]["content"]
+    return jsonify({"data": message})
     
 def get_img_prompt(text):
     headers = {
