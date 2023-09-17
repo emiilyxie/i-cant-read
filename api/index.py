@@ -37,6 +37,7 @@ def get_text():
     with open(os.path.join(TMP_FOLDER, "input.txt"), "r") as f:
         text = f.read()
 
+    text = text.split("\n")
     return jsonify({"data": text})
 
 
