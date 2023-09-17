@@ -22,23 +22,22 @@ def hello():
 
 @app.route('/api/save-text', methods=['POST'])
 def save_text():
-    print("at save_text")
     text = request.json['text']
 
     # write a file
     with open(os.path.join(TMP_FOLDER, "input.txt"), "w") as f:
         f.write(text)
 
-    return "ok"
+    return {"status": "text saved."}
         
 
 @app.route('/api/get-text')
-def getTestFile():
+def get_text():
     # read the file back and return it
     with open(os.path.join(TMP_FOLDER, "input.txt"), "r") as f:
         text = f.read()
 
-    return text
+    return jsonify({"data": text})
 
 
 @app.route('/api/generate-content')
