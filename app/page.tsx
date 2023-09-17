@@ -39,7 +39,10 @@ export default function Home() {
         </div>
 
         <div className={styles.uploadPDFContent}>
-          <Link href={"/readable"}><button onClick={() => { alert('pdf clicked') }}>Upload PDF</button></Link>
+          <form action="/api/parse-pdf" method="post" encType="multipart/form-data">
+            <input type="file" name="file" required />
+            <Link href={"/readable"}><button>Upload File</button></Link>
+          </form>
         </div>
       </div>
       

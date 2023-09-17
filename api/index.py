@@ -8,6 +8,7 @@ from base64 import b64decode
 from io import BytesIO
 from flask import send_file
 from dotenv import load_dotenv
+from PyPDF2 import PdfFileReader
 
 app = Flask(__name__)
 
@@ -31,6 +32,20 @@ def save_text():
         f.write(text)
 
     return {"status": "text saved."}
+
+
+@app.route('/api/parse-pdf', methods=['POST'])
+def parse_pdf():
+    
+    content = request.files['file'].read()
+    p = BytesIO(content)
+    pdf = PdfFileReader(p)
+
+    with open(os.path.join(TMP_FOLDER, "input.txt"), "w") as f:
+        for page in pdf.pages:
+            f.write(page.extract_text())
+
+    return {"status": "text saved."}
         
 
 @app.route('/api/get-text')
@@ -41,6 +56,7 @@ def get_text():
 
     text = list(filter(lambda t: t != "", text.split("\n")))
     return jsonify({"data": text})
+
 
 @app.route('/api/get-image', methods=['POST'])
 def get_image():
