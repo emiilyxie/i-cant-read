@@ -131,7 +131,7 @@ def generate_quiz():
     quiz = generate_quiz_with_chatgpt(text)
     answers = generate_answer_with_chatgpt(quiz)
     parsed_quiz = parse_quiz(quiz, answers)
-    return jsonify({"data": {"quiz": parsed_quiz, "answers": answers}})
+    return jsonify({"data": {"quiz": parsed_quiz, "original": quiz, "answers": answers}})
 
 @app.route('/api/generate-title', methods=['POST'])
 def generate_title():
@@ -240,7 +240,7 @@ def parse_quiz(quiz, answers):
     # Extract the answers
     answer_dict = {}
     for answer in answers:
-        answer_dict[answer[0]] = answer[1]
+        answer_dict[int(answer[0])] = answer[1]
 
     for i in range(0, len(quiz_lines), 5):
         # Check if there are enough lines remaining for the options

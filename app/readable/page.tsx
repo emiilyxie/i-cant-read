@@ -143,6 +143,7 @@ export default function ReadableContent() {
         {quizStatus == 200 ? 
           quiz.map((q : any, index) => {
             return <Quiz 
+              key={`quiz-${index}`} 
               quizKey={index} 
               question={q.question} 
               options={q.options} 
