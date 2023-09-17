@@ -7,6 +7,7 @@ from PIL import Image
 from base64 import b64decode
 from io import BytesIO
 from flask import send_file
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
@@ -47,7 +48,7 @@ def get_image():
     text = request.json['text']
 
     # Process the text with ChatGPT API
-    processed_text = process_with_chat_gpt(text)
+    processed_text = get_img_prompt(text)
     # Generate image
     response = openai.Image.create(
         prompt=processed_text+"High resolution"+"4k"+"very precise"+"cute style that is suitable for kids",
@@ -94,17 +95,17 @@ def summarize():
 
 @app.route('/api/generate-quiz', methods=['POST'])
 def generate_quiz():
-    return "generate quiz not yet implemented"
     # Get the text from the request body
     text = request.json['text']
-
     # Generate quiz with ChatGPT API
     quiz = generate_quiz_with_chatgpt(text)
-
-    return jsonify(quiz)
+    answers=generate_answer_with_chatgpt(quiz)
+    print(quiz)
+    print(answers)
+    return jsonify({"data": {"quiz": quiz, "answers": answers}})
 
     
-def process_with_chat_gpt(text):
+def get_img_prompt(text):
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {api_key}"
@@ -121,6 +122,22 @@ def process_with_chat_gpt(text):
     message = completions["choices"][0]["message"]["content"]
     return message
 
+def generate_answer_with_chatgpt(text):
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    data = {
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content":text+"giving the above quiz, give the answer in the following form: answers:1.a 2.b"}],
+    "temperature": 0.4
+    }
+    response = requests.post(url, headers=headers, json=data)
+    completions = response.json()
+    message2 = completions["choices"][0]["message"]["content"]
+    return message2
+
 def generate_quiz_with_chatgpt(text):
     headers = {
         "Content-Type": "application/json",
@@ -128,12 +145,74 @@ def generate_quiz_with_chatgpt(text):
     }
 
     data = {
-        "model": "gpt-4",
-        "messages": [{"role": "user", "content": text+"giving the above information,generating a quiz to test user's content,it better be a mutiple choice question very short and as precise as possible,like 1-3 questions(based on the amount of words in the article) to test people's understanding about the article,give the answer at the end in the following form with the answer all non capitalized,horizontally in format, e.g. 1.a 2.b 3.c "}],
-        "temperature": 1.2
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": text+"giving the above information,generating two quizs to test user's content,it better be a mutiple choice question very short and as precise as possible, this is just a format for how the output for quiz and answer should be,make sure very very strictly stick to the format:"+
+    '''
+    1. Question 1
+    a. Option 1
+    b. Option 2
+    c. Option 3
+    d. Option 4
+
+    1. Question 2
+    a. Option 1
+    b. Option 2
+    c. Option 3
+    d. Option 4'''
+    }],
+    "temperature": 0.3
     }
+    
 
     response = requests.post(url, headers=headers, json=data)
     completions = response.json()
     message1 = completions["choices"][0]["message"]["content"]
     return message1
+
+def parse_quiz(quiz, answers):
+    lines = quiz.split('\n')
+
+    # Initialize a new string to store the quiz without empty lines
+    new_quiz = ""
+
+    # Iterate through the lines and add non-empty lines to the new_quiz
+    for line in lines:
+        if line.strip():  # Check if the line is not empty after stripping whitespace
+            new_quiz += line + '\n'
+    quiz=new_quiz
+    # Split the quiz and answers into lines
+    quiz_lines = quiz.strip().split('\n')
+    answer_lines = answers.split()
+    parsed_quiz = []
+    
+    # Extract the answers
+    answer_dict = {}
+    for line in answer_lines:
+        parts = line.split('.')
+        if len(parts) == 2:
+            question_num = int(parts[0])
+            answer = parts[1]
+            answer_dict[question_num] = answer
+
+    for i in range(0, len(quiz_lines), 5):
+        # Check if there are enough lines remaining for the options
+        if i + 4 < len(quiz_lines):
+            # Get the question and options
+            question = quiz_lines[i].strip()
+            options = [quiz_lines[i+j].strip() for j in range(1, 5)]
+            # Check if the question is not empty
+            if question:
+                question_num = int(question.split('.')[0])
+                # Check if there's a corresponding answer
+            if question_num is not None and question_num in answer_dict:
+                    answer = answer_dict[question_num]
+                    # Add the parsed question to the list
+                    parsed_quiz.append({
+                    'question': question,
+                    'options': options,
+                    'answer': answer
+                })
+        else:
+            print(f"Error: Not enough lines for question {i//5 + 1}")
+
+    return parsed_quiz

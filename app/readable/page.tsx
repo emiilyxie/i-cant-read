@@ -6,10 +6,14 @@ import { useEffect, useState } from "react"
 
 export default function ReadableContent() {
 
-  const [content, setContent] = useState([]);
-  const [loadingContent, setLoadingContent] = useState(true);
-  const [summary, setSummary] = useState([]);
-  const [loadingSummary, setLoadingSummary] = useState(true);
+  const [content, setContent] = useState([])
+  const [summary, setSummary] = useState([])
+  const [quiz, setQuiz] = useState([])
+
+  const [loadingContent, setLoadingContent] = useState(true)
+  const [loadingSummary, setLoadingSummary] = useState(true)
+  const [loadingQuiz, setLoadingQuiz] = useState(true);
+ 
 
   useEffect(() => {
     fetch('/api/get-text')
@@ -33,6 +37,22 @@ export default function ReadableContent() {
             setSummary(data.data)
             setLoadingSummary(false)
         })
+
+        fetch('/api/generate-quiz', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              text: data.data.join("\n")
+          })
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data)
+            setQuiz(data.data.quiz)
+            setLoadingQuiz(false)
+        })
     })
   }, [])
 
@@ -50,6 +70,9 @@ export default function ReadableContent() {
         {!loadingContent && content.map((c, i) => {
           return <ContentBlock key={i} text={c} />
         })}
+      </div>
+      <div className={styles.quiz}>
+        {!loadingQuiz ? quiz : "Loading quiz..."}
       </div>
     </div>
   )
