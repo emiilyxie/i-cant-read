@@ -8,10 +8,17 @@
   display: flex;
 }
 
-.homeCol {
-  width: 100%;
+.textInputContent {
+  flex-grow: 2;
 }
 
+.uploadPDFContent {
+  flex-grow: 1;
+}
 .content {
   margin: 5rem 5rem;
+}
+
+.inputText {
+  outline: 3px;
 }
