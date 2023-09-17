@@ -8,7 +8,7 @@ export default function ContentBlock(props : any) {
   const [img, setImg] = useState("");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const getImage = () => {
     fetch('/api/get-image', { 
       method: 'POST',
       headers: {
@@ -24,6 +24,10 @@ export default function ContentBlock(props : any) {
         setImg(URL.createObjectURL(blob))
         setLoading(false)
     })
+  }
+
+  useEffect(() => {
+    // getImage()
   }, [])
 
   return (

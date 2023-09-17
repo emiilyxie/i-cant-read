@@ -4,57 +4,75 @@ import ContentBlock from "@/components/contentBlock"
 import styles from "@/app/readable/readable.module.css"
 import { useEffect, useState } from "react"
 import Quiz from "@/components/quizQuestion"
+import RegenerateButton from "@/components/regenerateButton"
 
 export default function ReadableContent() {
 
+  const [text, setText] = useState("")
   const [content, setContent] = useState([])
   const [summary, setSummary] = useState([])
   const [quiz, setQuiz] = useState([])
 
   const [loadingContent, setLoadingContent] = useState(true)
   const [loadingSummary, setLoadingSummary] = useState(true)
-  const [loadingQuiz, setLoadingQuiz] = useState(true);
- 
+  const [quizStatus, setQuizStatus] = useState(0);
 
-  useEffect(() => {
+  const fetchText = () => {
     fetch('/api/get-text')
       .then(res => res.json())
       .then(data => {
+        setText(data.data.join("\n"))
         setContent(data.data)
         setLoadingContent(false)
+    }).catch(error => console.error(error));
+  }
 
-        fetch('/api/summarize', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              text: data.data.join("\n")
-          })
-        })
-          .then(res => res.json())
-          .then(data => {
-            setSummary(data.data)
-            setLoadingSummary(false)
-        })
-
-        fetch('/api/generate-quiz', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              text: data.data.join("\n")
-          })
-        })
-          .then(res => res.json())
-          .then(data => {
-            console.log(data)
-            setQuiz(data.data.quiz)
-            setLoadingQuiz(false)
-        })
+  const fetchSummary = () => {
+    fetch('/api/summarize', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          text: text
+      })
     })
+      .then(res => res.json())
+      .then(data => {
+        setSummary(data.data)
+        setLoadingSummary(false)
+    })
+  }
+ 
+  const fetchQuiz = () => {
+    setQuizStatus(0)
+    fetch('/api/generate-quiz', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          text: text
+      })
+    })
+      .then(res => {
+        setQuizStatus(res.status);
+        return res.json()
+      })
+      .then(data => {
+        console.log(data)
+        setQuiz(data.data.quiz)
+    }).catch(error => console.error(error));
+  }
+
+  useEffect(() => {
+    fetchText()
   }, [])
+
+  useEffect(() => {
+    fetchSummary()
+    fetchQuiz()
+  }, [text])
 
   let title = "Typescript is annoying"
 
@@ -72,7 +90,7 @@ export default function ReadableContent() {
         })}
       </div>
       <div className={styles.quiz}>
-        {!loadingQuiz ? 
+        {quizStatus == 200 ? 
           quiz.map((q : any, index) => {
             return <Quiz 
               quizKey={index} 
@@ -80,9 +98,10 @@ export default function ReadableContent() {
               options={q.options} 
               answer={q.answer}
                />
-          })
-          :
-          "Loading quiz..."}
+          }) : (
+          quizStatus == 0 ?
+          "Loading quiz..." : 
+          <RegenerateButton type="quiz" action={fetchQuiz} />)}
       </div>
       
     </div>

@@ -166,7 +166,7 @@ def generate_quiz_with_chatgpt(text):
     c. Option 3
     d. Option 4'''
     }],
-    "temperature": 0.3
+    "temperature": 0.6
     }
     
 
