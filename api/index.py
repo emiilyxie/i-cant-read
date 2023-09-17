@@ -114,7 +114,7 @@ def generate_quiz():
     quiz = generate_quiz_with_chatgpt(text)
     answers = generate_answer_with_chatgpt(quiz)
     parsed_quiz = parse_quiz(quiz, answers)
-    return jsonify({"data": {"quiz": parsed_quiz}})
+    return jsonify({"data": {"quiz": parsed_quiz, "answers": answers}})
 
     
 def get_img_prompt(text):
@@ -142,7 +142,7 @@ def generate_answer_with_chatgpt(text):
 
     data = {
         "model": "gpt-3.5-turbo",
-        "messages": [{"role": "user", "content":text+"giving the above quiz, give the answer in the following form: answers:1.a 2.b"}],
+        "messages": [{"role": "user", "content":text+"giving the above quiz, give the answer in the following form: 1.a 2.b"}],
     "temperature": 0.4
     }
     response = requests.post(url, headers=headers, json=data)

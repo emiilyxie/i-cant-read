@@ -62,6 +62,7 @@ export default function ReadableContent() {
       })
       .then(data => {
         console.log(data)
+        console.log(data.data.answers)
         setQuiz(data.data.quiz)
     }).catch(error => console.error(error));
   }
