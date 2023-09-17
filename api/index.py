@@ -7,7 +7,6 @@ from PIL import Image
 from base64 import b64decode
 from io import BytesIO
 from flask import send_file
-from dotenv import load_dotenv
 
 app = Flask(__name__)
 
@@ -42,11 +41,6 @@ def get_text():
     text = list(filter(lambda t: t != "", text.split("\n")))
     return jsonify({"data": text})
 
-
-@app.route('/api/generate-content')
-def generate_content():
-    return "Hello world"
-
 @app.route('/api/get-image', methods=['POST'])
 def get_image():
     # Get the text from the request body
@@ -76,6 +70,27 @@ def get_image():
     
     # Send the image as a file
     return send_file(img_io, mimetype='image/jpeg')
+
+@app.route('/api/summarize', methods=['POST'])
+def summarize():
+    text = request.json['text']
+    print(text)
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    data = {
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": text+"using the text above to generate 15-25 words a very accurate and precise summary"}],
+        "temperature": 0.7
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+    completions = response.json()
+    message = completions["choices"][0]["message"]["content"]
+    return jsonify({"data": message})
 
 @app.route('/api/generate-quiz', methods=['POST'])
 def generate_quiz():
