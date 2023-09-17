@@ -8,7 +8,7 @@ from base64 import b64decode
 from io import BytesIO
 from flask import send_file
 from dotenv import load_dotenv
-from PyPDF2 import PdfFileReader
+from PyPDF2 import PdfReader
 import prodia
 from prodia import SdModel
 
@@ -44,13 +44,18 @@ def parse_pdf():
     
     content = request.files['file'].read()
     p = BytesIO(content)
-    pdf = PdfFileReader(p)
+    pdf = PdfReader(p)
 
-    with open(os.path.join(TMP_FOLDER, "input.txt"), "w") as f:
-        for page in pdf.pages:
-            f.write(page.extract_text())
+    res = ""
 
-    return {"status": "text saved."}
+    for page in pdf.pages:
+        res += f"{page.extract_text()}\n"
+
+    # with open(os.path.join(TMP_FOLDER, "input.txt"), "w") as f:
+    #     for page in pdf.pages:
+    #         f.write(page.extract_text())
+
+    return jsonify({"data": res})
         
 
 @app.route('/api/get-text')
