@@ -70,8 +70,10 @@ export default function ReadableContent() {
   }, [])
 
   useEffect(() => {
-    fetchSummary()
-    fetchQuiz()
+    if (text != "") {
+      fetchSummary()
+      fetchQuiz()
+    }
   }, [text])
 
   let title = "Typescript is annoying"
