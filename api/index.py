@@ -96,7 +96,7 @@ def get_image():
     image = client.sd_generate(
         prompt=processed_text,
         negative_prompt="badly drawn, blurry, low quality",
-        model=SdModel.ANYTHING_V5,
+        model=SdModel.ABSOLUTE_R_V181,
         upscale=True,
         aspect_ratio="landscape")
     url=image.url
@@ -163,7 +163,7 @@ def get_img_prompt(text):
 
     data = {
         "model": "gpt-4",
-        "messages": [{"role": "user", "content": text+"using the text above to generate a very accurate and precise 15-20 words prompt for AI generate art to generate art that contains educational and informative content,make sure the important thing are at the front in the prompt and be very precise about the image"}],
+        "messages": [{"role": "user", "content": text+"using the text above to generate a very accurate and precise 15-20 words prompt for AI generate art to generate art that contains informative content,make sure the important thing are at the front in the prompt and be very precise about the image"}],
         "temperature": 1.2
     }
 
