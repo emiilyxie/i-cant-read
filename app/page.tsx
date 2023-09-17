@@ -55,10 +55,8 @@ export default function Home() {
       <div className={styles.homeContent}>
         <div className={styles.textInputContent}>
           <textarea className={styles.textArea} placeholder={"Your text here"} value={textAreaText} onChange={handleTextAreaChange}></textarea>
-          <div>
-            <input type="file" accept=".pdf" name="file" onChange={handleFileChange}></input>
-            <Link href={"/readable"}><button onClick={handleProcessText}>Process Text</button></Link>
-          </div>
+          <input className={styles.inputFile} type="file" accept=".pdf" name="file" onChange={handleFileChange}></input>
+          <Link href={"/readable"}><button onClick={handleProcessText}>Process Text</button></Link>
         </div>
 
         <div className={styles.imgContent}>
