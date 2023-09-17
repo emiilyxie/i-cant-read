@@ -9,6 +9,8 @@ from io import BytesIO
 from flask import send_file
 from dotenv import load_dotenv
 from PyPDF2 import PdfFileReader
+import prodia
+from prodia import SdModel
 
 app = Flask(__name__)
 
@@ -18,6 +20,9 @@ MODEL_ENGINE = "gpt-4"
 url = "https://api.openai.com/v1/chat/completions"
 openai.api_key = api_key
 TMP_FOLDER = "/tmp"
+
+prodia_key= os.getenv("art_key")
+client = prodia.Client(api_key=prodia_key)
 
 @app.route('/api/')
 def hello():
@@ -57,36 +62,22 @@ def get_text():
     text = list(filter(lambda t: t != "", text.split("\n")))
     return jsonify({"data": text})
 
-
 @app.route('/api/get-image', methods=['POST'])
 def get_image():
-    # Get the text from the request body
+    
     text = request.json['text']
-
-    # Process the text with ChatGPT API
     processed_text = get_img_prompt(text)
-    # Generate image
-    response = openai.Image.create(
-        prompt=processed_text+"High resolution"+"4k"+"very precise"+"cute style that is suitable for kids",
-        n=1,
-        size="512x512",
-        response_format="b64_json"
-    )
+
+    image = client.sd_generate(
+        prompt=processed_text,
+        negative_prompt="badly drawn, blurry, low quality",
+        model=SdModel.TOONYOU_6)
+        
+    url=image.url
+
+    response = requests.get(url)
     
-    image_b64 = response['data'][0]['b64_json']
-    
-    # Convert the base64 string to a PIL Image object
-    img = Image.open(BytesIO(b64decode(image_b64)))
-    
-    # Create a BytesIO object and save the image to it
-    img_io = BytesIO()
-    img.save(img_io, 'JPEG', quality=70)
-    
-    # Seek to the beginning of the BytesIO object
-    img_io.seek(0)
-    
-    # Send the image as a file
-    return send_file(img_io, mimetype='image/jpeg')
+    return send_file(BytesIO(response.content), mimetype='image/png')
 
 @app.route('/api/summarize', methods=['POST'])
 def summarize():
