@@ -106,10 +106,9 @@ def generate_quiz():
     text = request.json['text']
     # Generate quiz with ChatGPT API
     quiz = generate_quiz_with_chatgpt(text)
-    answers=generate_answer_with_chatgpt(quiz)
-    print(quiz)
-    print(answers)
-    return jsonify({"data": {"quiz": quiz, "answers": answers}})
+    answers = generate_answer_with_chatgpt(quiz)
+    parsed_quiz = parse_quiz(quiz, answers)
+    return jsonify({"data": {"quiz": parsed_quiz}})
 
     
 def get_img_prompt(text):

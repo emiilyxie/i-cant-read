@@ -3,6 +3,7 @@
 import ContentBlock from "@/components/contentBlock"
 import styles from "@/app/readable/readable.module.css"
 import { useEffect, useState } from "react"
+import Quiz from "@/components/quizQuestion"
 
 export default function ReadableContent() {
 
@@ -33,7 +34,6 @@ export default function ReadableContent() {
         })
           .then(res => res.json())
           .then(data => {
-            console.log(data)
             setSummary(data.data)
             setLoadingSummary(false)
         })
@@ -72,8 +72,19 @@ export default function ReadableContent() {
         })}
       </div>
       <div className={styles.quiz}>
-        {!loadingQuiz ? quiz : "Loading quiz..."}
+        {!loadingQuiz ? 
+          quiz.map((q : any, index) => {
+            return <Quiz 
+              quizKey={index} 
+              question={q.question} 
+              options={q.options} 
+              answer={q.answer}
+               />
+          })
+          :
+          "Loading quiz..."}
       </div>
+      
     </div>
   )
 }
