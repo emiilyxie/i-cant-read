@@ -14,10 +14,29 @@ apiKey = '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'
 MODEL_ENGINE = "gpt-4"
 url = "https://api.openai.com/v1/chat/completions"
 openai.api_key = "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"
+TMP_FOLDER = "/tmp"
 
 @app.route('/api/')
 def hello():
     return "Hello world"
+
+@app.route('/api/testfile')
+def testfile():
+    print("hi this is testfile func")
+    # write a file
+    with open(os.path.join(TMP_FOLDER, "test2.txt"), "w") as f:
+        f.write("Hello world from testfile")
+    
+    return None
+
+@app.route('/api/gettestfile')
+def getTestFile():
+    # read the file back and return it
+    with open(os.path.join(TMP_FOLDER, "test2.txt"), "r") as f:
+        text = f.read()
+
+    return text
+
 
 @app.route('/api/generate-content')
 def generate_content():
