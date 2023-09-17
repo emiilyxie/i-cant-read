@@ -9,21 +9,21 @@ export default function ContentBlock(props : any) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/get-image', { 
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-          text: props.text
-      })
-    })
-      .then(res => res.blob())
-      .then(blob => {
-        console.log(blob)
-        setImg(URL.createObjectURL(blob))
-        setLoading(false)
-    })
+    // fetch('/api/get-image', { 
+    //   method: 'POST',
+    //   headers: {
+    //       'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //       text: props.text
+    //   })
+    // })
+    //   .then(res => res.blob())
+    //   .then(blob => {
+    //     console.log(blob)
+    //     setImg(URL.createObjectURL(blob))
+    //     setLoading(false)
+    // })
   }, [])
 
   return (
