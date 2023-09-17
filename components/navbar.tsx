@@ -1,8 +1,28 @@
+import Link from 'next/link';
+import styles from './navbar.module.css';
 
-export default function NavBar() {
+const Navbar = () => {
   return (
-    <div>
-      Navbar
-    </div>
-  )
-}
+    <nav className={styles.navbar}>
+      <ul>
+        <li>
+          <Link href="/">
+            Home
+          </Link>
+        </li>
+        <li>
+          <Link href="/readable">
+            Result
+          </Link>
+        </li>
+        <li>
+          <Link href="/about">
+            About
+          </Link>
+        </li>
+      </ul>
+    </nav>
+  );
+};
+
+export default Navbar;

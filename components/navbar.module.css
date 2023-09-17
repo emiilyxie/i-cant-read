@@ -1,0 +1,13 @@
+/* Navbar.module.css */
+.navbar {
+  padding: 2em 3em;
+  overflow: hidden;
+}
+
+.navbar a {
+    float: left;
+    display: block;
+    text-align: center;
+    padding-right: 2em;
+    text-decoration: none;
+}

@@ -22,12 +22,13 @@
 .textArea {
   border: 1px solid black;
   width: 100%;
-  height: 20rem;
+  height: 15em;
   padding: 1em;
+  margin-bottom: 1rem;
 }
 
 .content {
-  margin: 5rem 5rem;
+  margin: 0rem 5rem 3rem 5rem;
 }
 
 .inputText {
