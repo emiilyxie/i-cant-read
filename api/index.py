@@ -17,13 +17,15 @@ import pyttsx4
 app = Flask(__name__)
 
 load_dotenv()
-api_key = os.getenv("api_key")
+# api_key = os.getenv("api_key")
+api_key = os.environ.get("api_key")
 MODEL_ENGINE = "gpt-4"
 url = "https://api.openai.com/v1/chat/completions"
 openai.api_key = api_key
 TMP_FOLDER = "/tmp"
 
-prodia_key= os.getenv("art_key")
+# prodia_key= os.getenv("art_key")
+prodia_key= os.environ.get("art_key")
 client = prodia.Client(api_key=prodia_key)
 
 engine = pyttsx4.init()
