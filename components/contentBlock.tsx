@@ -36,13 +36,13 @@ export default function ContentBlock(props : any) {
 
   return (
     <div className={styles.paragraphContent}>
+      <div className={styles.paragraphText}>{props.text}</div>
       <div className={styles.paragraphImg}>{imgStatus != 0 ? 
       <> 
-        {imgStatus == 200 && <img src={img}></img>}
+        {imgStatus == 200 && <div><img src={img}></img></div>}
         <RegenerateButton type="image" action={getImage} />
       </> : 
       <LoadingSpinner description="Loading image..." />}</div>
-      <div className={styles.paragraphText}>{props.text}</div>
     </div>
   )
 }

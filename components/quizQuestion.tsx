@@ -1,6 +1,7 @@
 'use client'
 
 import { ChangeEvent, useState } from "react";
+import styles from "@/components/quizQuestion.module.css"
 
 const Quiz = (props : any) => {
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
@@ -19,10 +20,10 @@ const Quiz = (props : any) => {
   };
 
   return (
-    <div>
-      <h2>{props.question}</h2>
+    <div className={styles.quizItem}>
+      <div className={styles.question}>{props.question}</div>
       {props.options.map((option : string, index : number) => (
-        <div key={`${props.quizKey}-${index}`}>
+        <div className={styles.option} key={`${props.quizKey}-${index}`}>
           <input
             type="radio"
             id={`option-${props.quizKey}-${index}`}
@@ -34,8 +35,8 @@ const Quiz = (props : any) => {
           <label htmlFor={`option-${props.quizKey}-${index}`}>{option}</label>
         </div>
       ))}
-      <button onClick={handleSubmit}>Submit</button>
-      {showAnswer && <p>{isCorrect ? "Correct!" : "Incorrect, try again."}</p>}
+      <button className={styles.submitButton} onClick={handleSubmit}>Submit</button>
+      {showAnswer && <p className={styles.correctText}>{isCorrect ? "Correct!" : "Incorrect, try again."}</p>}
     </div>
   );
 };

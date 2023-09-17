@@ -50,23 +50,19 @@ export default function Home() {
 
   return (
     <div>
-      <div className={styles.homeHeader}>I Can't Read</div>
+      <div className={styles.homeHeader}>ICANTREAD</div>
 
       <div className={styles.homeContent}>
         <div className={styles.textInputContent}>
           <textarea className={styles.textArea} placeholder={"Your text here"} value={textAreaText} onChange={handleTextAreaChange}></textarea>
-          <Link href={"/readable"}><button onClick={handleProcessText}>Process Text</button></Link>
+          <div>
+            <input type="file" accept=".pdf" name="file" onChange={handleFileChange}></input>
+            <Link href={"/readable"}><button onClick={handleProcessText}>Process Text</button></Link>
+          </div>
         </div>
 
-        <div>
-          or
-        </div>
-
-        <div className={styles.uploadPDFContent}>
-          <input type="file" accept=".pdf" name="file" onChange={handleFileChange}></input>
-          {/* // <form action="/api/parse-pdf" method="post" encType="multipart/form-data">
-          //   <input type="file" name="file">Upload a file</input>
-          // </form> */}
+        <div className={styles.imgContent}>
+          {/* <img src="/character.jpeg" alt="character holding a book"></img> */}
         </div>
       </div>
       

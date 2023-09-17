@@ -81,14 +81,14 @@ export default function ReadableContent() {
   let title = "Typescript is annoying"
 
   return (
-    <div>
+    <div className={styles.content}>
       <div className={styles.title}>
         {title}
       </div>
       <div className={styles.summary}>
         {!loadingSummary ? summary : <LoadingSpinner description="Loading summary..." />}
       </div>
-      <div className={styles.content}>
+      <div>
         {!loadingContent && content.map((c, i) => {
           return <ContentBlock key={i} text={c} />
         })}

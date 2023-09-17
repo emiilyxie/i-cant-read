@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 import prodia
 from prodia import SdModel
+import re
 
 app = Flask(__name__)
 
@@ -194,17 +195,17 @@ def parse_quiz(quiz, answers):
     quiz=new_quiz
     # Split the quiz and answers into lines
     quiz_lines = quiz.strip().split('\n')
-    answer_lines = answers.split()
+
+    numbers = re.findall('\d+', answers)
+    letters = re.findall('[a-zA-Z]+', answers)
+    answers = list(zip(numbers, letters))# Outputs: [('1', 'a'), ('2', 'b')]
+
     parsed_quiz = []
     
     # Extract the answers
     answer_dict = {}
-    for line in answer_lines:
-        parts = line.split('.')
-        if len(parts) == 2:
-            question_num = int(parts[0])
-            answer = parts[1]
-            answer_dict[question_num] = answer
+    for answer in answers:
+        answer_dict[answer[0]] = answer[1]
 
     for i in range(0, len(quiz_lines), 5):
         # Check if there are enough lines remaining for the options
