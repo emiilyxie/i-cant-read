@@ -10,10 +10,10 @@ from flask import send_file
 
 app = Flask(__name__)
 
-apiKey = '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'
+apiKey = "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"
 MODEL_ENGINE = "gpt-4"
 url = "https://api.openai.com/v1/chat/completions"
-openai.api_key = "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"
+openai.api_key = apiKey
 TMP_FOLDER = "/tmp"
 
 @app.route('/api/')
@@ -45,9 +45,8 @@ def get_text():
 def generate_content():
     return "Hello world"
 
-@app.route('/api/process-text', methods=['POST'])
-def process_text():
-    return "process text not yet implemented"
+@app.route('/api/get-image', methods=['POST'])
+def get_image():
     # Get the text from the request body
     text = request.json['text']
 
