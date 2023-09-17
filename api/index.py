@@ -12,6 +12,7 @@ from PyPDF2 import PdfReader
 import prodia
 from prodia import SdModel
 import re
+import pyttsx4
 
 app = Flask(__name__)
 
@@ -24,6 +25,8 @@ TMP_FOLDER = "/tmp"
 
 prodia_key= os.getenv("art_key")
 client = prodia.Client(api_key=prodia_key)
+
+engine = pyttsx4.init()
 
 @app.route('/api/')
 def hello():
@@ -58,6 +61,20 @@ def parse_pdf():
 
     return jsonify({"data": res})
         
+
+@app.route('/api/tts', methods=['POST'])
+def tts():
+    text = request.json['text']
+    engine.setProperty("rate", 150)
+    engine.say(text)
+    engine.runAndWait()
+
+    return {"status": "done"}
+
+@app.route('/api/stoptts', methods=['POST'])
+def stoptts():
+    engine.stop()
+    return {"status": "done"}
 
 @app.route('/api/get-text')
 def get_text():

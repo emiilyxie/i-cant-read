@@ -67,6 +67,30 @@ export default function ReadableContent() {
     }).catch(error => console.error(error));
   }
 
+  const startTTS = () => {
+    fetch('/api/tts', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          text: text
+      })
+    })
+  }
+
+  const stopTTS = () => {
+    fetch('/api/stoptts', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          text: ""
+      })
+    })
+  }
+
   useEffect(() => {
     fetchText()
   }, [])
@@ -87,6 +111,10 @@ export default function ReadableContent() {
       </div>
       <div className={styles.summary}>
         {!loadingSummary ? summary : <LoadingSpinner description="Loading summary..." />}
+      </div>
+      <div className={styles.soundButtons}>
+        <button onClick={startTTS}>Start TTS</button>
+        <button onClick={stopTTS}>Stop TTS</button>
       </div>
       <div>
         {!loadingContent && content.map((c, i) => {

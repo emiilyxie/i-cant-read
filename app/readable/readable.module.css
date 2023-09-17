@@ -9,3 +9,14 @@
   font-style: italic;
   margin-bottom: 4em;
 }
+
+.soundButtons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.soundButtons button {
+  background-color: transparent;
+  text-decoration: underline;
+  color: rgb(var(--foreground-rgb));
+}
