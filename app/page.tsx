@@ -1,6 +1,6 @@
 'use client'
 
-import { generateQuiz, generateContent } from "@/lib/generateContent"
+import { generateQuiz, generateContent, saveText } from "@/lib/generateContent"
 import styles from "@/app/Page.module.css"
 import Link from "next/link"
 import { useState, ChangeEvent, MouseEvent } from "react"
@@ -14,7 +14,7 @@ export default function Home() {
   }
 
   const handleProcessText = (_ : MouseEvent<HTMLButtonElement>) => {
-    generateContent(textAreaText)
+    saveText(textAreaText)
   }
 
   return (

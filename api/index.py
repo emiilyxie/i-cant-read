@@ -20,19 +20,22 @@ TMP_FOLDER = "/tmp"
 def hello():
     return "Hello world"
 
-@app.route('/api/testfile')
-def testfile():
-    print("hi this is testfile func")
-    # write a file
-    with open(os.path.join(TMP_FOLDER, "test2.txt"), "w") as f:
-        f.write("Hello world from testfile")
-    
-    return None
+@app.route('/api/save-text', methods=['POST'])
+def save_text():
+    print("at save_text")
+    text = request.json['text']
 
-@app.route('/api/gettestfile')
+    # write a file
+    with open(os.path.join(TMP_FOLDER, "input.txt"), "w") as f:
+        f.write(text)
+
+    return "ok"
+        
+
+@app.route('/api/get-text')
 def getTestFile():
     # read the file back and return it
-    with open(os.path.join(TMP_FOLDER, "test2.txt"), "r") as f:
+    with open(os.path.join(TMP_FOLDER, "input.txt"), "r") as f:
         text = f.read()
 
     return text
