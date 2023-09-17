@@ -30,8 +30,12 @@ export default function Home() {
 
       <div className={styles.homeContent}>
         <div className={styles.textInputContent}>
-          <textarea className={"block"} onChange={handleTextAreaChange} id="inputText" rows={20} cols={50}></textarea>
+          <textarea className={styles.textArea} placeholder={"Paste text here"} onChange={handleTextAreaChange}></textarea>
           <Link href={"/readable"}><button onClick={handleProcessText}>Process Text</button></Link>
+        </div>
+
+        <div>
+          or
         </div>
 
         <div className={styles.uploadPDFContent}>
