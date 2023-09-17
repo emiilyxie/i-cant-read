@@ -5,6 +5,7 @@ import styles from "@/app/readable/readable.module.css"
 import { useEffect, useState } from "react"
 import Quiz from "@/components/quizQuestion"
 import RegenerateButton from "@/components/regenerateButton"
+import LoadingSpinner from "@/components/loadingSpinner"
 
 export default function ReadableContent() {
 
@@ -84,7 +85,7 @@ export default function ReadableContent() {
         {title}
       </div>
       <div className={styles.summary}>
-        {!loadingSummary ? summary : "Loading summary..."}
+        {!loadingSummary ? summary : <LoadingSpinner description="Loading summary..." />}
       </div>
       <div className={styles.content}>
         {!loadingContent && content.map((c, i) => {
@@ -102,7 +103,7 @@ export default function ReadableContent() {
                />
           }) : (
           quizStatus == 0 ?
-          "Loading quiz..." : 
+          <LoadingSpinner description="Loading quiz..." /> : 
           <RegenerateButton type="quiz" action={fetchQuiz} />)}
       </div>
       

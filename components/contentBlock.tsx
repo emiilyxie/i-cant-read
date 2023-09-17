@@ -3,6 +3,7 @@
 import styles from "@/components/contentBlock.module.css"
 import { useState, useEffect } from "react";
 import RegenerateButton from "./regenerateButton";
+import LoadingSpinner from "./loadingSpinner";
 
 export default function ContentBlock(props : any) {
 
@@ -40,7 +41,7 @@ export default function ContentBlock(props : any) {
         {imgStatus == 200 && <img src={img}></img>}
         <RegenerateButton type="image" action={getImage} />
       </> : 
-      "Loading image..."}</div>
+      <LoadingSpinner description="Loading image..." />}</div>
       <div className={styles.paragraphText}>{props.text}</div>
     </div>
   )
